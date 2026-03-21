@@ -9,8 +9,8 @@
     
     <style>
         :root {
-            --primary: #8da399; /* Verde Musgo */
-            --accent: #d4af37;  /* Dourado */
+            --primary: #8da399;
+            --accent: #d4af37;
             --text: #4a4a4a;
             --bg: #fafafa;
             --white: #ffffff;
@@ -71,6 +71,7 @@
             display: flex;
             justify-content: center;
             gap: 15px;
+            flex-wrap: wrap;
             border-bottom: 1px solid #eee;
         }
 
@@ -85,9 +86,11 @@
             font-size: 0.85rem;
             font-weight: 600;
             text-transform: uppercase;
+            font-family: 'Montserrat', sans-serif;
         }
 
         .nav button.active { background: var(--primary); color: white; }
+        .nav button:hover:not(.active) { background: var(--bg); }
 
         /* --- Sections --- */
         .page-section { display: none; padding: 40px 0; animation: fadeIn 0.6s ease; }
@@ -122,7 +125,6 @@
             font-style: normal;
         }
 
-        /* --- Maps Buttons --- */
         .maps-btn {
             display: inline-flex;
             align-items: center;
@@ -138,11 +140,7 @@
             transition: 0.2s;
         }
 
-        .maps-btn:hover {
-            background-color: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
+        .maps-btn:hover { background-color: var(--primary); color: white; border-color: var(--primary); }
 
         .note-box {
             display: inline-block;
@@ -155,14 +153,439 @@
             font-weight: 500;
         }
 
-        /* --- Locked Games Section --- */
+        /* --- Games locked card --- */
         .card { background: white; padding: 60px 40px; border-radius: 20px; box-shadow: var(--shadow); text-align: center; }
         .lock-icon { font-size: 3rem; color: #ccc; margin-bottom: 20px; display: block; }
         .locked-text { color: #888; font-style: italic; margin-top: 10px; }
 
+        /* ============================================
+           PHOTO GALLERY
+           ============================================ */
+
+        .gallery-header {
+            text-align: center;
+            margin-bottom: 36px;
+        }
+
+        .gallery-header h2 {
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .gallery-header p {
+            font-size: 0.88rem;
+            color: #999;
+            letter-spacing: 0.5px;
+        }
+
+        /* S3 config banner */
+        .s3-config-banner {
+            background: #fff;
+            border: 1px dashed #c8d8d3;
+            border-radius: 12px;
+            padding: 14px 20px;
+            margin-bottom: 28px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.82rem;
+            color: #666;
+            box-shadow: var(--shadow);
+        }
+
+        .s3-config-banner code {
+            background: #f0f4f2;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: var(--primary);
+        }
+
+        .s3-config-banner a {
+            color: var(--accent);
+            text-decoration: underline;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* Gallery controls */
+        .gallery-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .gallery-count {
+            font-size: 0.82rem;
+            color: #aaa;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .gallery-refresh-btn {
+            background: none;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 8px 18px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            font-family: 'Montserrat', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: 0.2s;
+        }
+
+        .gallery-refresh-btn:hover { background: var(--primary); color: white; }
+
+        /* Loading */
+        .gallery-loading {
+            text-align: center;
+            padding: 70px 20px;
+            color: #aaa;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 44px;
+            height: 44px;
+            border: 3px solid #eee;
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.85s linear infinite;
+            margin-bottom: 16px;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .gallery-loading p { font-size: 0.9rem; font-style: italic; }
+
+        /* Error */
+        .gallery-error {
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            padding: 50px 40px;
+            text-align: center;
+        }
+
+        .gallery-error .error-icon { font-size: 2.8rem; margin-bottom: 16px; }
+        .gallery-error h3 { margin-bottom: 12px; color: var(--text); }
+        .gallery-error p { font-size: 0.9rem; color: #888; max-width: 480px; margin: 0 auto 16px; line-height: 1.8; }
+        .gallery-error code { background: #f0f4f2; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; color: var(--primary); }
+
+        .gallery-error details {
+            margin-top: 16px;
+            font-size: 0.82rem;
+            text-align: left;
+            max-width: 560px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .gallery-error details summary { cursor: pointer; color: var(--accent); margin-bottom: 8px; }
+
+        .gallery-error details pre {
+            background: #f8f8f8;
+            padding: 12px;
+            border-radius: 8px;
+            overflow: auto;
+            font-size: 0.82em;
+            line-height: 1.6;
+            color: #666;
+        }
+
+        .gallery-error-btn {
+            display: inline-block;
+            margin-top: 20px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .gallery-error-btn:hover { background: #7a9189; }
+
+        /* Empty */
+        .gallery-empty { text-align: center; padding: 70px 20px; color: #bbb; }
+        .gallery-empty .empty-icon { font-size: 3rem; margin-bottom: 16px; }
+        .gallery-empty p { font-size: 0.9rem; }
+
+        /* Masonry grid */
+        .photo-masonry { columns: 3; column-gap: 14px; }
+
+        @media (max-width: 700px) { .photo-masonry { columns: 2; } }
+        @media (max-width: 420px) { .photo-masonry { columns: 1; } }
+
+        .photo-item {
+            break-inside: avoid;
+            margin-bottom: 14px;
+            border-radius: 14px;
+            overflow: hidden;
+            cursor: pointer;
+            position: relative;
+            background: #eee;
+            transition: transform 0.25s, box-shadow 0.25s;
+        }
+
+        .photo-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.12);
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.4s ease;
+        }
+
+        .photo-item:hover img { transform: scale(1.05); }
+
+        /* Hover overlay */
+        .photo-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(74,74,74,0.75) 0%, transparent 55%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            padding: 14px;
+            border-radius: 14px;
+        }
+
+        .photo-item:hover .photo-overlay { opacity: 1; }
+
+        .photo-overlay-name {
+            color: rgba(255,255,255,0.85);
+            font-size: 0.72rem;
+            font-weight: 600;
+            max-width: 55%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            letter-spacing: 0.3px;
+        }
+
+        .photo-overlay-actions { display: flex; gap: 7px; }
+
+        .overlay-btn {
+            background: rgba(255,255,255,0.92);
+            border: none;
+            color: var(--text);
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s, transform 0.15s;
+        }
+
+        .overlay-btn:hover { background: var(--accent); color: white; transform: scale(1.1); }
+
+        /* Skeleton */
+        .skeleton-card {
+            break-inside: avoid;
+            margin-bottom: 14px;
+            border-radius: 14px;
+            background: linear-gradient(90deg, #efefef 25%, #f8f8f8 50%, #efefef 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.4s infinite;
+        }
+
+        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+        /* Load more */
+        .load-more-row { text-align: center; padding: 30px 0 10px; }
+
+        .load-more-btn {
+            background: none;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 12px 36px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: 0.2s;
+        }
+
+        .load-more-btn:hover { background: var(--primary); color: white; }
+
+        /* Lightbox */
+        .lightbox-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(20, 20, 20, 0.95);
+            z-index: 5000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .lightbox-overlay.open { opacity: 1; pointer-events: all; }
+
+        .lightbox-inner {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 92vw;
+        }
+
+        .lightbox-inner img {
+            max-width: 88vw;
+            max-height: 80vh;
+            object-fit: contain;
+            border-radius: 12px;
+            box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+            transition: opacity 0.2s;
+        }
+
+        .lightbox-inner img.loading { opacity: 0.2; }
+
+        .lightbox-close {
+            position: absolute;
+            top: -46px;
+            right: 0;
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.6);
+            font-size: 1.8em;
+            cursor: pointer;
+            transition: color 0.2s;
+            line-height: 1;
+        }
+
+        .lightbox-close:hover { color: white; }
+
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            font-size: 1.3em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+        .lightbox-nav:hover { background: var(--primary); border-color: var(--primary); }
+        .lightbox-nav.prev { left: -58px; }
+        .lightbox-nav.next { right: -58px; }
+
+        .lightbox-toolbar {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-top: 18px;
+        }
+
+        .lightbox-filename {
+            color: rgba(255,255,255,0.5);
+            font-size: 0.78rem;
+            max-width: 50vw;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            letter-spacing: 0.3px;
+        }
+
+        .lightbox-download-btn {
+            background: var(--primary);
+            border: none;
+            color: white;
+            padding: 9px 22px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: background 0.2s;
+        }
+
+        .lightbox-download-btn:hover { background: #7a9189; }
+
+        .lightbox-counter { color: rgba(255,255,255,0.35); font-size: 0.78rem; }
+
+        /* Help Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(20,20,20,0.7);
+            z-index: 6000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.open { display: flex; }
+
+        .modal-box {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 520px;
+            width: 92%;
+            position: relative;
+            font-size: 0.88rem;
+            line-height: 1.8;
+            color: var(--text);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.2);
+        }
+
+        .modal-box h3 { font-family: 'Playfair Display', serif; color: var(--primary); margin-bottom: 18px; font-size: 1.3em; }
+        .modal-close { position: absolute; top: 18px; right: 20px; background: none; border: none; font-size: 1.4em; cursor: pointer; color: #aaa; }
+        .modal-close:hover { color: var(--text); }
+        .modal-box ol { padding-left: 18px; }
+        .modal-box li { margin-bottom: 12px; }
+        .modal-box pre {
+            background: #f5f7f6;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 0.8em;
+            overflow: auto;
+            margin-top: 6px;
+            line-height: 1.5;
+            color: #555;
+        }
+        .modal-box code { background: #f0f4f2; padding: 2px 5px; border-radius: 4px; color: var(--primary); }
+
         @media (max-width: 600px) {
             .countdown-item { min-width: 65px; }
             .timeline-card { padding: 25px; }
+            .lightbox-nav.prev { left: -8px; top: auto; bottom: 70px; transform: none; }
+            .lightbox-nav.next { right: -8px; top: auto; bottom: 70px; transform: none; }
         }
     </style>
 </head>
@@ -183,53 +606,43 @@
     <nav class="nav">
         <button onclick="showPage('details')" id="btn-details" class="active">O Dia</button>
         <button onclick="showPage('games')" id="btn-games">Diversão</button>
+        <button onclick="showPage('gallery')" id="btn-gallery">📷 Galeria</button>
     </nav>
 
     <main class="container">
-        
+
+        <!-- O Dia -->
         <div id="details" class="page-section active">
             <h2 style="text-align: center; margin-bottom: 40px; color: var(--primary);">Onde e Quando</h2>
             
             <div class="timeline-card">
                 <span class="timeline-time">14:00 — A Cerimónia</span>
                 <h3>Conservatória de Oeiras</h3>
-                <address class="address">
-                    Rua João I, nº 16 - r/c, 2780-065 Oeiras
-                </address>
-                <a href="https://maps.google.com/?q=Rua+João+I+16+Oeiras" target="_blank" class="maps-btn">
-                    📍 Abrir no GPS
-                </a>
+                <address class="address">Rua João I, nº 16 - r/c, 2780-065 Oeiras</address>
+                <a href="https://maps.google.com/?q=Rua+João+I+16+Oeiras" target="_blank" class="maps-btn">📍 Abrir no GPS</a>
             </div>
 
             <div class="timeline-card" style="border-left-color: var(--primary);">
                 <span class="timeline-time">Tarde — Receção</span>
                 <h3>Nossa Casa</h3>
                 <p>Após o "Sim", celebramos em família com comida e bebidas.</p>
-                <address class="address">
-                    R Dr Francisco Salgado Zenha nº6 5B, Massamá
-                </address>
-                <a href="https://maps.app.goo.gl/T8dzN498arXNeYpQ9" target="_blank" class="maps-btn">
-                    📍 Abrir no GPS
-                </a>
+                <address class="address">R Dr Francisco Salgado Zenha nº6 5B, Massamá</address>
+                <a href="https://maps.app.goo.gl/T8dzN498arXNeYpQ9" target="_blank" class="maps-btn">📍 Abrir no GPS</a>
                 <br>
                 <div class="note-box">Preparamos tudo com muito carinho para vos receber!</div>
-                
             </div>
 
             <div class="timeline-card">
                 <span class="timeline-time">20:00 — O Jantar</span>
                 <h3>Restaurante Mamma Donella</h3>
-                <address class="address">
-                    R. Bem Casados 14, 2745-781 Queluz
-                </address>
-                <a href="https://maps.google.com/?q=Restaurante+Mamadonella+Queluz" target="_blank" class="maps-btn">
-                    📍 Abrir no GPS
-                </a>
+                <address class="address">R. Bem Casados 14, 2745-781 Queluz</address>
+                <a href="https://maps.google.com/?q=Restaurante+Mamadonella+Queluz" target="_blank" class="maps-btn">📍 Abrir no GPS</a>
                 <br>
                 <div class="note-box">🚶 Iremos a pé da nossa casa até ao restaurante.</div>
             </div>
         </div>
 
+        <!-- Diversão -->
         <div id="games" class="page-section">
             <div class="card">
                 <span class="lock-icon">🔒</span>
@@ -239,33 +652,277 @@
             </div>
         </div>
 
+        <!-- Galeria -->
+        <div id="gallery" class="page-section">
+
+            <div class="gallery-header">
+                <h2>As Nossas Memórias</h2>
+                <p>Clique numa foto para ampliar &nbsp;·&nbsp; Faça download das suas favoritas</p>
+            </div>
+
+            <div class="s3-config-banner">
+                <span style="font-size:1.3em;">⚙️</span>
+                <span>
+                    Bucket: <code>wedding-joao-jess-1</code> &nbsp;·&nbsp;
+                    Região: <code>eu-west-3</code> &nbsp;·&nbsp;
+                    <a onclick="openHelpModal()">Como tornar público?</a>
+                </span>
+            </div>
+
+            <div class="gallery-controls">
+                <span class="gallery-count" id="galleryCount"></span>
+                <button class="gallery-refresh-btn" onclick="loadGallery()">↺ &nbsp;Recarregar</button>
+            </div>
+
+            <div id="galleryContent"></div>
+
+            <div class="load-more-row" id="loadMoreRow" style="display:none;">
+                <button class="load-more-btn" onclick="loadMorePhotos()">Ver mais fotos</button>
+            </div>
+        </div>
+
     </main>
 
+    <!-- Lightbox -->
+    <div class="lightbox-overlay" id="lightbox" onclick="closeLightboxOnBg(event)">
+        <div class="lightbox-inner">
+            <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+            <button class="lightbox-nav prev" onclick="navigateLightbox(-1)">‹</button>
+            <button class="lightbox-nav next" onclick="navigateLightbox(1)">›</button>
+            <img id="lightboxImg" src="" alt="Foto" />
+            <div class="lightbox-toolbar">
+                <span class="lightbox-filename" id="lightboxFilename"></span>
+                <button class="lightbox-download-btn" onclick="downloadLightboxPhoto()">⬇ &nbsp;Download</button>
+                <span class="lightbox-counter" id="lightboxCounter"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- S3 Help Modal -->
+    <div class="modal-overlay" id="helpModal" onclick="closeHelpModalOnBg(event)">
+        <div class="modal-box">
+            <button class="modal-close" onclick="closeHelpModal()">✕</button>
+            <h3>Como tornar o bucket público</h3>
+            <ol>
+                <li>Vá à consola AWS S3 → selecione <code>wedding-joao-jess-1</code></li>
+                <li>Em <strong>Permissões</strong>, desative <em>"Block all public access"</em></li>
+                <li>Adicione esta <strong>Bucket Policy</strong>:
+                    <pre>{
+  "Version": "2012-10-17",
+  "Statement": [{
+    "Effect": "Allow",
+    "Principal": "*",
+    "Action": "s3:GetObject",
+    "Resource": "arn:aws:s3:::wedding-joao-jess-1/*"
+  }]
+}</pre>
+                </li>
+                <li>Ative <strong>CORS</strong> (aba Permissões → CORS):
+                    <pre>[{
+  "AllowedHeaders": ["*"],
+  "AllowedMethods": ["GET"],
+  "AllowedOrigins": ["*"],
+  "ExposeHeaders": []
+}]</pre>
+                </li>
+                <li>Recarregue a galeria — as fotos aparecerão automaticamente.</li>
+            </ol>
+        </div>
+    </div>
+
     <script>
-        // Countdown
+        // =============================================
+        //   S3 CONFIGURATION
+        // =============================================
+        const S3_CONFIG = {
+            BUCKET_BASE_URL: 'https://wedding-joao-jess-1.s3.eu-west-3.amazonaws.com',
+            IMAGE_EXTENSIONS: ['jpg', 'jpeg', 'png', 'gif', 'webp', 'heic', 'avif'],
+            PAGE_SIZE: 24,
+        };
+
+        // ---- Countdown ----
         const weddingDate = new Date("January 30, 2026 14:00:00").getTime();
         function updateCountdown() {
-            const now = new Date().getTime();
-            const distance = weddingDate - now;
-            if (distance < 0) {
-                document.getElementById("countdown").innerHTML = "É HOJE! 🎉";
-                return;
-            }
-            document.getElementById("days").innerText = String(Math.floor(distance / (1000 * 60 * 60 * 24))).padStart(2, '0');
-            document.getElementById("hours").innerText = String(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
-            document.getElementById("mins").innerText = String(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
-            document.getElementById("secs").innerText = String(Math.floor((distance % (1000 * 60)) / 1000)).padStart(2, '0');
+            const distance = weddingDate - Date.now();
+            if (distance < 0) { document.getElementById("countdown").innerHTML = "<strong>É HOJE! 🎉</strong>"; return; }
+            document.getElementById("days").innerText  = String(Math.floor(distance / 86400000)).padStart(2,'0');
+            document.getElementById("hours").innerText = String(Math.floor((distance % 86400000) / 3600000)).padStart(2,'0');
+            document.getElementById("mins").innerText  = String(Math.floor((distance % 3600000) / 60000)).padStart(2,'0');
+            document.getElementById("secs").innerText  = String(Math.floor((distance % 60000) / 1000)).padStart(2,'0');
         }
         setInterval(updateCountdown, 1000);
         updateCountdown();
 
-        // Nav
+        // ---- Nav ----
         function showPage(pageId) {
             document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
             document.getElementById('btn-' + pageId).classList.add('active');
             window.scrollTo({ top: 0, behavior: 'smooth' });
+            if (pageId === 'gallery' && !galleryLoaded) loadGallery();
+        }
+
+        // ---- Gallery state ----
+        let galleryLoaded = false;
+        let allPhotos = [];
+        let displayedCount = 0;
+        let currentLightboxIndex = 0;
+
+        // ---- Load gallery ----
+        async function loadGallery() {
+            galleryLoaded = true;
+            allPhotos = [];
+            displayedCount = 0;
+
+            const content = document.getElementById('galleryContent');
+            const countEl = document.getElementById('galleryCount');
+            const loadMoreRow = document.getElementById('loadMoreRow');
+
+            countEl.textContent = '';
+            loadMoreRow.style.display = 'none';
+            content.innerHTML = buildSkeletons(12);
+
+            try {
+                const photos = await fetchS3PhotoList();
+                allPhotos = photos;
+
+                if (photos.length === 0) {
+                    content.innerHTML = `
+                        <div class="gallery-empty">
+                            <div class="empty-icon">📭</div>
+                            <p>Nenhuma foto encontrada no bucket.<br>Adicione imagens ao S3 e recarregue.</p>
+                        </div>`;
+                    return;
+                }
+
+                countEl.textContent = `${photos.length} foto${photos.length !== 1 ? 's' : ''}`;
+                content.innerHTML = '<div class="photo-masonry" id="masonryGrid"></div>';
+                renderPhotoChunk(0, S3_CONFIG.PAGE_SIZE);
+                if (photos.length > S3_CONFIG.PAGE_SIZE) loadMoreRow.style.display = 'block';
+
+            } catch (err) {
+                content.innerHTML = buildErrorHTML(err);
+            }
+        }
+
+        async function fetchS3PhotoList() {
+            const url = `${S3_CONFIG.BUCKET_BASE_URL}/?list-type=2&max-keys=1000`;
+            const res = await fetch(url);
+            if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}\n\nURL: ${url}`);
+            const text = await res.text();
+            const xml = new DOMParser().parseFromString(text, 'application/xml');
+            return Array.from(xml.querySelectorAll('Contents Key'))
+                .map(el => el.textContent)
+                .filter(key => S3_CONFIG.IMAGE_EXTENSIONS.includes(key.split('.').pop().toLowerCase()));
+        }
+
+        function renderPhotoChunk(start, end) {
+            const grid = document.getElementById('masonryGrid');
+            allPhotos.slice(start, end).forEach((key, i) => {
+                const idx = start + i;
+                const url = `${S3_CONFIG.BUCKET_BASE_URL}/${encodeURIComponent(key)}`;
+                const filename = key.split('/').pop();
+                const item = document.createElement('div');
+                item.className = 'photo-item';
+                item.innerHTML = `
+                    <img src="${url}" alt="${filename}" loading="lazy"
+                         onerror="this.parentElement.style.display='none'"
+                         onclick="openLightbox(${idx})">
+                    <div class="photo-overlay">
+                        <span class="photo-overlay-name">${filename}</span>
+                        <div class="photo-overlay-actions">
+                            <button class="overlay-btn" title="Ampliar" onclick="openLightbox(${idx})">🔍</button>
+                            <button class="overlay-btn" title="Download" onclick="downloadPhoto('${url}','${filename}',event)">⬇</button>
+                        </div>
+                    </div>`;
+                grid.appendChild(item);
+            });
+            displayedCount = end;
+        }
+
+        function loadMorePhotos() {
+            const nextEnd = Math.min(displayedCount + S3_CONFIG.PAGE_SIZE, allPhotos.length);
+            renderPhotoChunk(displayedCount, nextEnd);
+            if (nextEnd >= allPhotos.length) document.getElementById('loadMoreRow').style.display = 'none';
+        }
+
+        // ---- Lightbox ----
+        function openLightbox(index) {
+            currentLightboxIndex = index;
+            document.getElementById('lightbox').classList.add('open');
+            document.body.style.overflow = 'hidden';
+            setLightboxPhoto(index);
+        }
+
+        function setLightboxPhoto(index) {
+            const key = allPhotos[index];
+            const url = `${S3_CONFIG.BUCKET_BASE_URL}/${encodeURIComponent(key)}`;
+            const img = document.getElementById('lightboxImg');
+            img.classList.add('loading');
+            img.src = url;
+            img.onload = () => img.classList.remove('loading');
+            document.getElementById('lightboxFilename').textContent = key.split('/').pop();
+            document.getElementById('lightboxCounter').textContent = `${index + 1} / ${allPhotos.length}`;
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        function closeLightboxOnBg(e) { if (e.target === document.getElementById('lightbox')) closeLightbox(); }
+
+        function navigateLightbox(dir) {
+            currentLightboxIndex = (currentLightboxIndex + dir + allPhotos.length) % allPhotos.length;
+            setLightboxPhoto(currentLightboxIndex);
+        }
+
+        function downloadLightboxPhoto() {
+            const key = allPhotos[currentLightboxIndex];
+            downloadPhoto(`${S3_CONFIG.BUCKET_BASE_URL}/${encodeURIComponent(key)}`, key.split('/').pop(), null);
+        }
+
+        function downloadPhoto(url, filename, event) {
+            if (event) event.stopPropagation();
+            const a = document.createElement('a');
+            a.href = url; a.download = filename; a.target = '_blank';
+            document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        }
+
+        document.addEventListener('keydown', e => {
+            if (!document.getElementById('lightbox').classList.contains('open')) return;
+            if (e.key === 'ArrowRight') navigateLightbox(1);
+            if (e.key === 'ArrowLeft')  navigateLightbox(-1);
+            if (e.key === 'Escape')     closeLightbox();
+        });
+
+        // ---- Help Modal ----
+        function openHelpModal()  { document.getElementById('helpModal').classList.add('open'); }
+        function closeHelpModal() { document.getElementById('helpModal').classList.remove('open'); }
+        function closeHelpModalOnBg(e) { if (e.target === document.getElementById('helpModal')) closeHelpModal(); }
+
+        // ---- UI helpers ----
+        function buildSkeletons(n) {
+            const heights = [160,220,175,255,145,200,170,240,190,155,215,180];
+            let html = '<div class="photo-masonry">';
+            for (let i = 0; i < n; i++) html += `<div class="skeleton-card" style="height:${heights[i%heights.length]}px;"></div>`;
+            return html + '</div>';
+        }
+
+        function buildErrorHTML(err) {
+            return `
+            <div class="gallery-error">
+                <div class="error-icon">🔒</div>
+                <h3>Não foi possível carregar as fotos</h3>
+                <p>O bucket <code>wedding-joao-jess-1</code> não está acessível.<br>
+                   Verifique as permissões públicas e a configuração CORS no AWS S3.</p>
+                <details>
+                    <summary>Ver detalhes do erro</summary>
+                    <pre>${err.message}</pre>
+                </details>
+                <button class="gallery-error-btn" onclick="openHelpModal()">📋 Ver instruções</button>
+            </div>`;
         }
     </script>
 </body>
