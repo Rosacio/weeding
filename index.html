@@ -43,23 +43,6 @@
         .couple-names { font-size: clamp(2.5rem, 8vw, 4.5rem); margin: 10px 0; font-weight: 400; }
         .couple-names span { color: var(--accent); font-style: italic; }
 
-        .countdown-container {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin-top: 30px;
-        }
-
-        .countdown-item {
-            background: var(--bg);
-            padding: 12px;
-            border-radius: 12px;
-            min-width: 75px;
-        }
-
-        .count-num { display: block; font-size: 1.6rem; font-weight: bold; color: var(--primary); }
-        .count-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; color: #888; }
-
         /* --- Nav --- */
         .nav {
             position: sticky;
@@ -153,11 +136,6 @@
             font-weight: 500;
         }
 
-        /* --- Games locked card --- */
-        .card { background: white; padding: 60px 40px; border-radius: 20px; box-shadow: var(--shadow); text-align: center; }
-        .lock-icon { font-size: 3rem; color: #ccc; margin-bottom: 20px; display: block; }
-        .locked-text { color: #888; font-style: italic; margin-top: 10px; }
-
         /* ============================================
            PHOTO GALLERY
            ============================================ */
@@ -176,36 +154,6 @@
             font-size: 0.88rem;
             color: #999;
             letter-spacing: 0.5px;
-        }
-
-        /* S3 config banner */
-        .s3-config-banner {
-            background: #fff;
-            border: 1px dashed #c8d8d3;
-            border-radius: 12px;
-            padding: 14px 20px;
-            margin-bottom: 28px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 0.82rem;
-            color: #666;
-            box-shadow: var(--shadow);
-        }
-
-        .s3-config-banner code {
-            background: #f0f4f2;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 0.9em;
-            color: var(--primary);
-        }
-
-        .s3-config-banner a {
-            color: var(--accent);
-            text-decoration: underline;
-            cursor: pointer;
-            font-weight: 600;
         }
 
         /* Gallery controls */
@@ -538,51 +486,7 @@
 
         .lightbox-counter { color: rgba(255,255,255,0.35); font-size: 0.78rem; }
 
-        /* Help Modal */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(20,20,20,0.7);
-            z-index: 6000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal-overlay.open { display: flex; }
-
-        .modal-box {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            max-width: 520px;
-            width: 92%;
-            position: relative;
-            font-size: 0.88rem;
-            line-height: 1.8;
-            color: var(--text);
-            box-shadow: 0 30px 80px rgba(0,0,0,0.2);
-        }
-
-        .modal-box h3 { font-family: 'Playfair Display', serif; color: var(--primary); margin-bottom: 18px; font-size: 1.3em; }
-        .modal-close { position: absolute; top: 18px; right: 20px; background: none; border: none; font-size: 1.4em; cursor: pointer; color: #aaa; }
-        .modal-close:hover { color: var(--text); }
-        .modal-box ol { padding-left: 18px; }
-        .modal-box li { margin-bottom: 12px; }
-        .modal-box pre {
-            background: #f5f7f6;
-            border-radius: 8px;
-            padding: 12px;
-            font-size: 0.8em;
-            overflow: auto;
-            margin-top: 6px;
-            line-height: 1.5;
-            color: #555;
-        }
-        .modal-box code { background: #f0f4f2; padding: 2px 5px; border-radius: 4px; color: var(--primary); }
-
         @media (max-width: 600px) {
-            .countdown-item { min-width: 65px; }
             .timeline-card { padding: 25px; }
             .lightbox-nav.prev { left: -8px; top: auto; bottom: 70px; transform: none; }
             .lightbox-nav.next { right: -8px; top: auto; bottom: 70px; transform: none; }
@@ -595,17 +499,10 @@
         <h3 style="letter-spacing: 5px; font-size: 0.8rem; color: var(--primary); margin-bottom: 10px;">SAVE THE DATE</h3>
         <div class="couple-names">Jessica <span>&</span> João</div>
         
-        <div class="countdown-container" id="countdown">
-            <div class="countdown-item"><span class="count-num" id="days">00</span><span class="count-label">Dias</span></div>
-            <div class="countdown-item"><span class="count-num" id="hours">00</span><span class="count-label">Horas</span></div>
-            <div class="countdown-item"><span class="count-num" id="mins">00</span><span class="count-label">Min</span></div>
-            <div class="countdown-item"><span class="count-num" id="secs">00</span><span class="count-label">Seg</span></div>
-        </div>
     </header>
 
     <nav class="nav">
         <button onclick="showPage('details')" id="btn-details" class="active">O Dia</button>
-        <button onclick="showPage('games')" id="btn-games">Diversão</button>
         <button onclick="showPage('gallery')" id="btn-gallery">📷 Galeria</button>
     </nav>
 
@@ -642,31 +539,12 @@
             </div>
         </div>
 
-        <!-- Diversão -->
-        <div id="games" class="page-section">
-            <div class="card">
-                <span class="lock-icon">🔒</span>
-                <h2>Área de Diversão</h2>
-                <p class="locked-text">Esta funcionalidade estará disponível apenas no dia do nosso casamento.</p>
-                <p style="margin-top: 20px; font-size: 0.9rem; color: #aaa;">Preparem-se para as surpresas! ✨</p>
-            </div>
-        </div>
-
         <!-- Galeria -->
         <div id="gallery" class="page-section">
 
             <div class="gallery-header">
                 <h2>As Nossas Memórias</h2>
                 <p>Clique numa foto para ampliar &nbsp;·&nbsp; Faça download das suas favoritas</p>
-            </div>
-
-            <div class="s3-config-banner">
-                <span style="font-size:1.3em;">⚙️</span>
-                <span>
-                    Bucket: <code>wedding-joao-jess-1</code> &nbsp;·&nbsp;
-                    Região: <code>eu-west-3</code> &nbsp;·&nbsp;
-                    <a onclick="openHelpModal()">Como tornar público?</a>
-                </span>
             </div>
 
             <div class="gallery-controls">
@@ -698,38 +576,6 @@
         </div>
     </div>
 
-    <!-- S3 Help Modal -->
-    <div class="modal-overlay" id="helpModal" onclick="closeHelpModalOnBg(event)">
-        <div class="modal-box">
-            <button class="modal-close" onclick="closeHelpModal()">✕</button>
-            <h3>Como tornar o bucket público</h3>
-            <ol>
-                <li>Vá à consola AWS S3 → selecione <code>wedding-joao-jess-1</code></li>
-                <li>Em <strong>Permissões</strong>, desative <em>"Block all public access"</em></li>
-                <li>Adicione esta <strong>Bucket Policy</strong>:
-                    <pre>{
-  "Version": "2012-10-17",
-  "Statement": [{
-    "Effect": "Allow",
-    "Principal": "*",
-    "Action": "s3:GetObject",
-    "Resource": "arn:aws:s3:::wedding-joao-jess-1/*"
-  }]
-}</pre>
-                </li>
-                <li>Ative <strong>CORS</strong> (aba Permissões → CORS):
-                    <pre>[{
-  "AllowedHeaders": ["*"],
-  "AllowedMethods": ["GET"],
-  "AllowedOrigins": ["*"],
-  "ExposeHeaders": []
-}]</pre>
-                </li>
-                <li>Recarregue a galeria — as fotos aparecerão automaticamente.</li>
-            </ol>
-        </div>
-    </div>
-
     <script>
         // =============================================
         //   S3 CONFIGURATION
@@ -739,19 +585,6 @@
             IMAGE_EXTENSIONS: ['jpg', 'jpeg', 'png', 'gif', 'webp', 'heic', 'avif'],
             PAGE_SIZE: 24,
         };
-
-        // ---- Countdown ----
-        const weddingDate = new Date("January 30, 2026 14:00:00").getTime();
-        function updateCountdown() {
-            const distance = weddingDate - Date.now();
-            if (distance < 0) { document.getElementById("countdown").innerHTML = "<strong>É HOJE! 🎉</strong>"; return; }
-            document.getElementById("days").innerText  = String(Math.floor(distance / 86400000)).padStart(2,'0');
-            document.getElementById("hours").innerText = String(Math.floor((distance % 86400000) / 3600000)).padStart(2,'0');
-            document.getElementById("mins").innerText  = String(Math.floor((distance % 3600000) / 60000)).padStart(2,'0');
-            document.getElementById("secs").innerText  = String(Math.floor((distance % 60000) / 1000)).padStart(2,'0');
-        }
-        setInterval(updateCountdown, 1000);
-        updateCountdown();
 
         // ---- Nav ----
         function showPage(pageId) {
@@ -897,11 +730,6 @@
             if (e.key === 'Escape')     closeLightbox();
         });
 
-        // ---- Help Modal ----
-        function openHelpModal()  { document.getElementById('helpModal').classList.add('open'); }
-        function closeHelpModal() { document.getElementById('helpModal').classList.remove('open'); }
-        function closeHelpModalOnBg(e) { if (e.target === document.getElementById('helpModal')) closeHelpModal(); }
-
         // ---- UI helpers ----
         function buildSkeletons(n) {
             const heights = [160,220,175,255,145,200,170,240,190,155,215,180];
@@ -921,7 +749,6 @@
                     <summary>Ver detalhes do erro</summary>
                     <pre>${err.message}</pre>
                 </details>
-                <button class="gallery-error-btn" onclick="openHelpModal()">📋 Ver instruções</button>
             </div>`;
         }
     </script>
