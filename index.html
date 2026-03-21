@@ -656,19 +656,29 @@
                 const idx = start + i;
                 const url = `${S3_CONFIG.BUCKET_BASE_URL}/${encodeURIComponent(key)}`;
                 const filename = key.split('/').pop();
+
                 const item = document.createElement('div');
                 item.className = 'photo-item';
                 item.innerHTML = `
                     <img src="${url}" alt="${filename}" loading="lazy"
-                         onerror="this.parentElement.style.display='none'"
-                         onclick="openLightbox(${idx})">
+                         onerror="this.parentElement.style.display='none'">
                     <div class="photo-overlay">
                         <span class="photo-overlay-name">${filename}</span>
                         <div class="photo-overlay-actions">
-                            <button class="overlay-btn" title="Ampliar" onclick="openLightbox(${idx})">🔍</button>
-                            <button class="overlay-btn" title="Download" onclick="downloadPhoto('${url}','${filename}',event)">⬇</button>
+                            <button class="overlay-btn zoom-btn" title="Ampliar">🔍</button>
+                            <button class="overlay-btn dl-btn" title="Download">⬇</button>
                         </div>
                     </div>`;
+
+                // Clicking anywhere on the card opens the lightbox
+                item.addEventListener('click', () => openLightbox(idx));
+
+                // Download button: stop propagation so it doesn't also open lightbox
+                item.querySelector('.dl-btn').addEventListener('click', e => {
+                    e.stopPropagation();
+                    downloadPhoto(url, filename);
+                });
+
                 grid.appendChild(item);
             });
             displayedCount = end;
@@ -716,8 +726,7 @@
             downloadPhoto(`${S3_CONFIG.BUCKET_BASE_URL}/${encodeURIComponent(key)}`, key.split('/').pop(), null);
         }
 
-        async function downloadPhoto(url, filename, event) {
-            if (event) event.stopPropagation();
+        async function downloadPhoto(url, filename) {
             try {
                 const res = await fetch(url);
                 const blob = await res.blob();
