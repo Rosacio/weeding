@@ -728,18 +728,23 @@
 
         async function downloadPhoto(url, filename) {
             try {
-                const res = await fetch(url);
+                const res = await fetch(url, { mode: 'cors', cache: 'no-store' });
+                if (!res.ok) throw new Error('fetch failed');
                 const blob = await res.blob();
-                const blobUrl = URL.createObjectURL(blob);
+                const ext = filename.split('.').pop().toLowerCase();
+                const mimeMap = { jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png', gif: 'image/gif', webp: 'image/webp', heic: 'image/heic', avif: 'image/avif' };
+                const typedBlob = new Blob([blob], { type: mimeMap[ext] || blob.type || 'application/octet-stream' });
+                const blobUrl = URL.createObjectURL(typedBlob);
                 const a = document.createElement('a');
                 a.href = blobUrl;
                 a.download = filename;
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
-                setTimeout(() => URL.revokeObjectURL(blobUrl), 5000);
+                setTimeout(() => URL.revokeObjectURL(blobUrl), 10000);
             } catch (err) {
-                console.error('Download failed:', err);
+                // Fallback: open in new tab if blob download fails
+                window.open(url, '_blank');
             }
         }
 
